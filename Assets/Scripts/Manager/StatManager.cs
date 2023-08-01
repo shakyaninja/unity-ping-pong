@@ -18,6 +18,7 @@ public class StatManager : MonoBehaviour
     public int timer = 0;
     public string winner = "";
     public string loser = "";
+    private GameSceneUIManager gameSceneUIManager;
     public void Awake()
     {
         Instance = this;
@@ -27,35 +28,35 @@ public class StatManager : MonoBehaviour
     {
         scoreP1 ++;
         //do update UIManager
-        UIManager.Instance.scorePlayer1(scoreP1);
+        gameSceneUIManager.scorePlayer1(scoreP1);
     }
 
     public void incrementScoreP2()
     {
         scoreP2 ++;
         //do update UIManager
-        UIManager.Instance.scorePlayer2(scoreP2);
+        gameSceneUIManager.scorePlayer2(scoreP2);
     }
 
     public void incrementScoreP3()
     {
         scoreP3++;
         //do update UIManager
-        UIManager.Instance.scorePlayer3(scoreP3);
+        gameSceneUIManager.scorePlayer3(scoreP3);
     }
 
     public void incrementScoreP4()
     {
         scoreP4++;
         //do update UIManager
-        UIManager.Instance.scorePlayer4(scoreP4);
+        gameSceneUIManager.scorePlayer4(scoreP4);
     }
 
     public void incrementTimer()
     {
         timer++;
         //do update UIManager
-        UIManager.Instance.incrementTimerText(timer);
+        gameSceneUIManager.incrementTimerText(timer);
     }
 
     public void chooseWinner()

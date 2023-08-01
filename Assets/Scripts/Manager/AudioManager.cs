@@ -18,6 +18,7 @@ public class AudioManager : MonoBehaviour
             s.audioSource.volume = s.volume;
             s.audioSource.pitch = s.pitch;
         }
+        DontDestroyOnLoad(this.gameObject);
     }
 
     // Update is called once per frame
