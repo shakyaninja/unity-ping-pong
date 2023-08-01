@@ -5,11 +5,12 @@ using UnityEngine;
 
 public class BallMovement : MonoBehaviour
 {
-    [SerializeField] private float startSpeed = 5.0f;
-    [SerializeField] private float incrementFactor = 1.3f;
-    [SerializeField] private float maxSpeed = 24.0f;
+    [SerializeField] private float startSpeed;
+    [SerializeField] private float incrementFactor;
+    [SerializeField] private float maxSpeed;
     [SerializeField] private int hits = 0;
 
+    public ParticleSpawner particleSpawner;
     private Vector2 previousDirection = Vector2.zero;
     private int sameDirectionHit = 0;
 
@@ -18,11 +19,13 @@ public class BallMovement : MonoBehaviour
 
     Rigidbody2D ballRB;
     Rigidbody2D racketRB;
+    TrailRenderer trailRenderer;
     
     // Start is called before the first frame update
     void Start()
     {
         ballRB = GetComponent<Rigidbody2D>(); // select RB from current component
+        trailRenderer = GetComponent<TrailRenderer>();
         StartCoroutine(Timer(2));
         Move(new Vector2(-10, 0));
     }
@@ -46,13 +49,17 @@ public class BallMovement : MonoBehaviour
 
     private IEnumerator RespawnBall(float waitingSeconds)
     {
+        //play point music
+        AudioManager.Instance.Play("BallHit");
         //hide ball
+        trailRenderer.enabled = false;
         ballRB.velocity = Vector2.zero;
         this.gameObject.GetComponent<SpriteRenderer>().enabled = false;
         ballRB.transform.position = new Vector2(0,0);
         yield return new WaitForSeconds(waitingSeconds);
         //show ball
         this.gameObject.GetComponent<SpriteRenderer>().enabled = true;
+        trailRenderer.enabled = true;
         Move(new Vector2(Random.Range(-10.0f, 10.0f), Random.Range(-10.0f, 10.0f)));
     }
 
@@ -63,6 +70,10 @@ public class BallMovement : MonoBehaviour
         Vector2 clampDirection = Vector2.ClampMagnitude(directionHit, 0.8f);
         Debug.Log(string.Format("direction Hit : {1} and prev direction : {0}, comp : {2}", previousDirection, directionHit, new Vector2(-directionHit.x, -directionHit.y)));
         //if (previousDirection == new Vector2(-directionHit.x,-directionHit.y))
+
+        //do particle spawning here
+        //particleSpawner.SpawnParticlesAt(collision.GetContact(0).point);
+
         if (previousDirection == new Vector2(-directionHit.x,-directionHit.y))
         {
             Debug.Log("same direction hit ");
@@ -74,13 +85,13 @@ public class BallMovement : MonoBehaviour
             //play hit sound
             AudioManager.Instance.Play("BallHitWall");
             hits ++;
-            Debug.Log("direction: "+directionHit);
-            Debug.Log("previous velocity : " + ballRB.velocity);
-            Debug.Log("increment factor : " + (incrementFactor * hits));
+            //Debug.Log("direction: "+directionHit);
+            //Debug.Log("previous velocity : " + ballRB.velocity);
+            //Debug.Log("increment factor : " + (incrementFactor * hits));
 
             //using contact normal
             Vector2 contactNormal = collision.GetContact(0).normal;
-            Debug.Log("contact normal : " + contactNormal);
+            //Debug.Log("contact normal : " + contactNormal);
 
             // Calculate the new direction based on the collision point
             Vector2 collisionPoint = collision.GetContact(0).point;
@@ -130,13 +141,13 @@ public class BallMovement : MonoBehaviour
             StartCoroutine(RespawnBall(2));
         }
 
-        if (sameDirectionHit > 2)
+       /* if (sameDirectionHit > 2)
         {
             Debug.Log("trigger random direction");
             //give random direction
             ballRB.velocity = new Vector2(Random.Range(-1.0f,1.0f), Random.Range(-1.0f, 1.0f)) * ballRB.velocity.magnitude;
             sameDirectionHit = 0;
-        }
+        }*/
         previousDirection = ballRB.velocity.normalized;
     }
 

@@ -11,6 +11,7 @@ TagManager:
   - ball
   - topBorder
   - bottomBorder
+  - trail
   layers:
   - Default
   - TransparentFX
