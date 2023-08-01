@@ -47,10 +47,10 @@ public class BallMovement : MonoBehaviour
     private IEnumerator RespawnBall(float waitingSeconds)
     {
         //hide ball
-        this.gameObject.GetComponent<SpriteRenderer>().enabled = false;
-        yield return new WaitForSeconds(waitingSeconds);
         ballRB.velocity = Vector2.zero;
+        this.gameObject.GetComponent<SpriteRenderer>().enabled = false;
         ballRB.transform.position = new Vector2(0,0);
+        yield return new WaitForSeconds(waitingSeconds);
         //show ball
         this.gameObject.GetComponent<SpriteRenderer>().enabled = true;
         Move(new Vector2(Random.Range(-10.0f, 10.0f), Random.Range(-10.0f, 10.0f)));
