@@ -477,10 +477,10 @@ RectTransform:
   m_Children:
   - {fileID: 699917862}
   - {fileID: 1473004084}
-  - {fileID: 1810124427}
-  - {fileID: 40712211}
   - {fileID: 1342553189}
   - {fileID: 2093366595}
+  - {fileID: 40712211}
+  - {fileID: 1810124427}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

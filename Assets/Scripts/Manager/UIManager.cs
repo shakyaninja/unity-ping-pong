@@ -16,7 +16,7 @@ public class UIManager: MonoBehaviour
     [SerializeField] private TextMeshProUGUI winnerText;
     [SerializeField] private TextMeshProUGUI loserText;
     [SerializeField] private Button mainMenu, start, retry, highscore;
-
+    [SerializeField] private PowerUp[] powerups;
     public static UIManager Instance;
 
     public void Awake()
@@ -59,9 +59,9 @@ public class UIManager: MonoBehaviour
         scoreP4.text = score.ToString();
     }
 
-    public void incrementTimerText(int timerValue)
+    public void incrementTimerText(float timerValue)
     {
-        timerText.text = timerValue.ToString();
+        timerText.text = ((int)timerValue).ToString();
     }
 
     public void announceWinner()

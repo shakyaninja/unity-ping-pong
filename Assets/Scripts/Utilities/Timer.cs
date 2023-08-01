@@ -27,11 +27,15 @@ public class Timer : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if(StatManager.Instance.timer == 60)
         {
             GameManager.Instance.loadGameOver();
+        }
+        else
+        {
+            StatManager.Instance.timer += Time.deltaTime;
         }
     }
 }
