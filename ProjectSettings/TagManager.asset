@@ -12,6 +12,7 @@ TagManager:
   - topBorder
   - bottomBorder
   - trail
+  - power-up-reverse-control
   layers:
   - Default
   - TransparentFX

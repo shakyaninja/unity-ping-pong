@@ -53,4 +53,9 @@ public class GameManager : MonoBehaviour
         Debug.Log(index);
         SceneManager.LoadScene(index);
     }
+
+    public void spawnPowerUp()
+    {
+
+    }
 }
