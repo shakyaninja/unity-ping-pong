@@ -8,6 +8,11 @@ public class GameManager : MonoBehaviour
 
     public static GameManager Instance;
     private Scene activeScene;
+    private int p1ControlDir = 1;
+    private int p2ControlDir = 1;
+    private int p3ControlDir = 1;
+    private int p4ControlDir = 1;
+    public int isLastHitBy = 0;
 
 
     private void Awake()
@@ -54,8 +59,52 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(index);
     }
 
-    public void spawnPowerUp()
+    public void spawnPowerUp(string name)
     {
 
+    }
+
+    public void activatePowerUpFor(string name)
+    {
+       switch(isLastHitBy)
+        {
+            case 1:
+                //activate for p1
+                break;
+
+            case 2:
+                //activate for p2
+                break;
+
+            case 3:
+                //activate for p3
+                break;
+
+            case 4:
+                //activate for p4
+                break;
+
+            default:
+                break;
+
+        }
+    }
+
+    public void activatePowerUp(int player,string name)
+    {
+        switch (name)
+        {
+            case "reverse-control":
+                break;
+
+            default:
+                break;
+
+        }
+    }
+
+    public void reverseControl()
+    {
+        p1ControlDir = -1;
     }
 }
