@@ -10,11 +10,9 @@ public class BallMovement : MonoBehaviour
     [SerializeField] private float maxSpeed;
     [SerializeField] private int hits = 0;
 
-    public ParticleSpawner particleSpawner;
+    public ParticleSystem particleSystem;
     private Vector2 previousDirection = Vector2.zero;
     private int sameDirectionHit = 0;
-
-    private int Hits{ get; set; }
 
 
     Rigidbody2D ballRB;
@@ -49,6 +47,8 @@ public class BallMovement : MonoBehaviour
 
     private IEnumerator RespawnBall(float waitingSeconds)
     {
+        //reset hits
+        hits = 0;
         //play point music
         AudioManager.Instance.Play("BallHit");
         //hide ball
@@ -68,7 +68,7 @@ public class BallMovement : MonoBehaviour
     {
         Vector2 directionHit = collision.GetContact(0).normal;
         Vector2 clampDirection = Vector2.ClampMagnitude(directionHit, 0.8f);
-        Debug.Log(string.Format("direction Hit : {1} and prev direction : {0}, comp : {2}", previousDirection, directionHit, new Vector2(-directionHit.x, -directionHit.y)));
+       // Debug.Log(string.Format("direction Hit : {1} and prev direction : {0}, comp : {2}", previousDirection, directionHit, new Vector2(-directionHit.x, -directionHit.y)));
         //if (previousDirection == new Vector2(-directionHit.x,-directionHit.y))
 
         //do particle spawning here
@@ -76,7 +76,7 @@ public class BallMovement : MonoBehaviour
 
         if (previousDirection == new Vector2(-directionHit.x,-directionHit.y))
         {
-            Debug.Log("same direction hit ");
+           // Debug.Log("same direction hit ");
             sameDirectionHit++;
         }
 
@@ -84,6 +84,11 @@ public class BallMovement : MonoBehaviour
         {
             //play hit sound
             AudioManager.Instance.Play("BallHitWall");
+            //handle particle spawn
+            Debug.Log(string.Format("collison position {0}", collision.transform.position));
+            particleSystem.transform.Translate(collision.transform.position);
+            particleSystem.Play();
+
             hits ++;
             //Debug.Log("direction: "+directionHit);
             //Debug.Log("previous velocity : " + ballRB.velocity);
@@ -105,8 +110,8 @@ public class BallMovement : MonoBehaviour
             //ballRB.velocity = ballRB.velocity.normalized * ((incrementFactor * hits * Time.deltaTime) + ballRB.velocity.magnitude); //inverse direction of hit
             //ballRB.velocity = Vector2.Reflect(ballRB.velocity, contactNormal);
             //Debug.Log("reflected contact normal : " + Vector2.Reflect(ballRB.velocity, contactNormal));
-            Debug.Log("hits : "+hits);
-            Debug.Log("new velocity : "+ballRB.velocity);
+           // Debug.Log("hits : "+hits);
+            //Debug.Log("new velocity : "+ballRB.velocity);
         }
         else if (collision.gameObject.CompareTag("rightBorder"))
         {

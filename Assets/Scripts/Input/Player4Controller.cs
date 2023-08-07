@@ -8,7 +8,7 @@ public class Player4Controller : InputController
     private Vector2 direction;
     protected override void handleMovement()
     {
-        racketRB.velocity = new Vector2(Input.GetAxis("Player4") * controlSpeed,0);
+        racketRB.velocity = new Vector2(Input.GetAxis("Player4") * controlSpeed,0) * GameManager.Instance.pControlDir[3];
     }
 
     /*protected override void OnCollisionEnter2D(Collision2D collision)

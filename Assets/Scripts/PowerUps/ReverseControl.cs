@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ReverseControl : MonoBehaviour
+public class ReverseControl : PowerUp
 {
+    private bool isTriggred = false;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -16,12 +18,17 @@ public class ReverseControl : MonoBehaviour
         
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("ball"))
+        if (!isTriggred && collision.gameObject.CompareTag("ball"))
         {
-            //activate power up
-            GameManager.Instance.isLastHitBy;
+            //activate power up by checking which player has last hit the ball
+            GameManager.Instance.activatePowerUp(gameObject.tag);
+            //disable the powerup
+            //gameObject.SetActive(false);
+
         }
     }
+
+
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,12 +9,9 @@ public class GameManager : MonoBehaviour
 
     public static GameManager Instance;
     private Scene activeScene;
-    private int p1ControlDir = 1;
-    private int p2ControlDir = 1;
-    private int p3ControlDir = 1;
-    private int p4ControlDir = 1;
+    public float[] pControlDir = new float[4] { 1, 1, 1, 1 };
     public int isLastHitBy = 0;
-
+    public delegate void CoolDownDelegate(int player);
 
     private void Awake()
     {
@@ -61,7 +59,34 @@ public class GameManager : MonoBehaviour
 
     public void spawnPowerUp(string name)
     {
+        Vector2 position = new Vector2(0, 0);
+        
+    }
 
+    public void setIsLastHitBy(string player)
+    {
+        switch (player)
+        {
+            case "player1":
+                isLastHitBy = 1;
+                break;
+
+            case "player2":
+                isLastHitBy = 2;
+                break;
+
+            case "player3":
+                isLastHitBy = 3;
+                break;
+
+            case "player4":
+                isLastHitBy = 4;
+                break;
+
+            default:
+                isLastHitBy = 0;
+                break;
+        }
     }
 
     public void activatePowerUpFor(string name)
@@ -90,11 +115,16 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void activatePowerUp(int player,string name)
+    public void activatePowerUp(string name)
     {
         switch (name)
         {
-            case "reverse-control":
+            case "power-up-reverse-control":
+                reverseControl(isLastHitBy);
+                break;
+
+            case "power-up-slow-time":
+                slowTime(isLastHitBy);
                 break;
 
             default:
@@ -103,8 +133,34 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void reverseControl()
+    public void reverseControl(int player)
     {
-        p1ControlDir = -1;
+        Debug.Log(string.Format("reverse control of {0}", player));
+        //do it for player 
+        pControlDir[player] = -1;
+        StartCoroutine(cooldownPowerUp(player, 6));
+    }
+
+    public void slowTime(int player)
+    {
+        Debug.Log(string.Format("slow time of {0}", player));
+        //do it for player 
+        pControlDir[player] = 0.2f;
+    }
+
+    public void slowTimeReset(int player)
+    {
+        pControlDir[player] = 1;
+    }
+
+    public void reverseControlReset(int player)
+    {
+        pControlDir[player] = 1;
+    }
+
+    IEnumerator cooldownPowerUp(int player, int time )
+    {
+        yield return new WaitForSeconds(time);
+        reverseControlReset(player);
     }
 }

@@ -167,6 +167,7 @@ MonoBehaviour:
   incrementFactor: 20
   maxSpeed: 600
   hits: 0
+  particleSystem: {fileID: 0}
 --- !u!82 &8602320343397152807
 AudioSource:
   m_ObjectHideFlags: 0
@@ -305,7 +306,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 0.7
+  m_Time: 1.3
   m_PreviewTimeScale: 1
   m_Parameters:
     serializedVersion: 3

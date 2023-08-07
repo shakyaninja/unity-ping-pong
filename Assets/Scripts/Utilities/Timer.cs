@@ -19,7 +19,6 @@ public class Timer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log(string.Format("current scene : {0}", GameManager.Instance.getActiveScene().name));
         if(GameManager.Instance.getActiveScene().name == "GameScene")
         {
             StartCoroutine("CheckTimer");
@@ -31,6 +30,7 @@ public class Timer : MonoBehaviour
     {
         if(StatManager.Instance.timer == 60)
         {
+            Debug.Log("triggered game over");
             GameManager.Instance.loadGameOver();
         }
         else
