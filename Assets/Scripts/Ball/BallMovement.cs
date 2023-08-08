@@ -69,7 +69,7 @@ public class BallMovement : MonoBehaviour
     {
         Debug.Log("spawn particle called");
         prtclSystem.Play();
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.7f);
         prtclSystem.Stop();
     }
 
@@ -107,7 +107,7 @@ public class BallMovement : MonoBehaviour
             direction.Normalize();
 
             //handle particle spawn
-            prtclSystem.transform.Translate(collisionPoint);
+            prtclSystem.transform.position = collisionPoint;
             StartCoroutine("SpawnParticle");
 
             // Update the ball's velocity with the new direction and increased speed
