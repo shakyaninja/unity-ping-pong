@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,7 +12,8 @@ public class GameManager : MonoBehaviour
     private Scene activeScene;
     public float[] pControlDir = new float[4] { 1, 1, 1, 1 };
     public int isLastHitBy = 0;
-    public delegate void CoolDownDelegate(int player);
+    public bool canSpawnPowerUp = false;
+    public string[] powerUps = new string[4] { "reverse-control", "slow-time", "shield", "illusion" };
 
     private void Awake()
     {
@@ -25,9 +27,13 @@ public class GameManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        
+    void FixedUpdate()
+    {   
+        if(canSpawnPowerUp)
+        {
+            //spawn power ups randomly
+            spawnPowerUp(powerUps[0]);
+        }
     }
 
     public Scene getActiveScene()
@@ -59,8 +65,12 @@ public class GameManager : MonoBehaviour
 
     public void spawnPowerUp(string name)
     {
-        Vector2 position = new Vector2(0, 0);
-        
+        Vector2 position = new Vector2(Random.Range(0,14), Random.Range(-4, 2));
+        //find object from heirarchy
+        GameObject powerUpObj = GameObject.FindGameObjectWithTag(name);
+        powerUpObj.transform.position = position;
+        powerUpObj.SetActive(true);
+        //enable it
     }
 
     public void setIsLastHitBy(string player)
@@ -127,6 +137,14 @@ public class GameManager : MonoBehaviour
                 slowTime(isLastHitBy);
                 break;
 
+            case "power-up-shield":
+                slowTime(isLastHitBy);
+                break;
+
+            case "power-up-illusion":
+                slowTime(isLastHitBy);
+                break;
+
             default:
                 break;
 
@@ -148,19 +166,28 @@ public class GameManager : MonoBehaviour
         pControlDir[player] = 0.2f;
     }
 
-    public void slowTimeReset(int player)
+    public void shield(int player)
     {
-        pControlDir[player] = 1;
+        Debug.Log(string.Format("shield of {0}", player));
+        
+        
     }
 
-    public void reverseControlReset(int player)
+    public void illusion()
     {
-        pControlDir[player] = 1;
+        Debug.Log(string.Format("illusion "));
+
+    }
+
+    public void powerUpReset()
+    {
+        pControlDir = new float[] { 1, 1, 1, 1 };
     }
 
     IEnumerator cooldownPowerUp(int player, int time )
     {
         yield return new WaitForSeconds(time);
-        reverseControlReset(player);
+        //reset all powerups
+        powerUpReset();
     }
 }

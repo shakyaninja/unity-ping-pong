@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class ReverseControl : PowerUp
 {
-    private bool isTriggred = false;
     
     // Start is called before the first frame update
     void Start()
@@ -20,7 +19,7 @@ public class ReverseControl : PowerUp
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!isTriggred && collision.gameObject.CompareTag("ball"))
+        if (collision.gameObject.CompareTag("ball"))
         {
             //activate power up by checking which player has last hit the ball
             GameManager.Instance.activatePowerUp(gameObject.tag);

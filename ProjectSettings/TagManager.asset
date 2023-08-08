@@ -13,6 +13,9 @@ TagManager:
   - bottomBorder
   - trail
   - power-up-reverse-control
+  - power-up-shield
+  - power-up-slow-time
+  - power-up-illusion
   layers:
   - Default
   - TransparentFX

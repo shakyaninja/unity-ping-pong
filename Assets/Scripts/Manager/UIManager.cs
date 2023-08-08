@@ -59,9 +59,9 @@ public class UIManager: MonoBehaviour
         scoreP4.text = score.ToString();
     }
 
-    public void incrementTimerText(float timerValue)
+    public void incrementTimerText(int timerValue)
     {
-        timerText.text = ((int)timerValue).ToString();
+        timerText.text = (timerValue).ToString();
     }
 
     public void announceWinner()

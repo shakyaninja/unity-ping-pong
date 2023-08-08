@@ -15,7 +15,7 @@ public class StatManager : MonoBehaviour
     public int scoreP2 = 0;
     public int scoreP3 = 0;
     public int scoreP4 = 0;
-    public float timer = 0;
+    public int timer = 0;
     public string winner = "";
     public string loser = "";
     public void Awake()

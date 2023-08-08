@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class BallMovement : MonoBehaviour
 {
@@ -10,7 +12,7 @@ public class BallMovement : MonoBehaviour
     [SerializeField] private float maxSpeed;
     [SerializeField] private int hits = 0;
 
-    public ParticleSystem particleSystem;
+    public ParticleSystem prtclSystem;
     private Vector2 previousDirection = Vector2.zero;
     private int sameDirectionHit = 0;
 
@@ -63,16 +65,20 @@ public class BallMovement : MonoBehaviour
         Move(new Vector2(Random.Range(-10.0f, 10.0f), Random.Range(-10.0f, 10.0f)));
     }
 
+    private IEnumerator SpawnParticle()
+    {
+        Debug.Log("spawn particle called");
+        prtclSystem.Play();
+        yield return new WaitForSeconds(0.3f);
+        prtclSystem.Stop();
+    }
+
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Vector2 directionHit = collision.GetContact(0).normal;
         Vector2 clampDirection = Vector2.ClampMagnitude(directionHit, 0.8f);
-       // Debug.Log(string.Format("direction Hit : {1} and prev direction : {0}, comp : {2}", previousDirection, directionHit, new Vector2(-directionHit.x, -directionHit.y)));
-        //if (previousDirection == new Vector2(-directionHit.x,-directionHit.y))
-
-        //do particle spawning here
-        //particleSpawner.SpawnParticlesAt(collision.GetContact(0).point);
+ 
 
         if (previousDirection == new Vector2(-directionHit.x,-directionHit.y))
         {
@@ -84,10 +90,6 @@ public class BallMovement : MonoBehaviour
         {
             //play hit sound
             AudioManager.Instance.Play("BallHitWall");
-            //handle particle spawn
-            Debug.Log(string.Format("collison position {0}", collision.transform.position));
-            particleSystem.transform.Translate(collision.transform.position);
-            particleSystem.Play();
 
             hits ++;
             //Debug.Log("direction: "+directionHit);
@@ -103,6 +105,10 @@ public class BallMovement : MonoBehaviour
             Vector2 racketCenter = collision.gameObject.transform.position;
             Vector2 direction = collisionPoint - racketCenter;
             direction.Normalize();
+
+            //handle particle spawn
+            prtclSystem.transform.Translate(collisionPoint);
+            StartCoroutine("SpawnParticle");
 
             // Update the ball's velocity with the new direction and increased speed
             ballRB.velocity = clampDirection * (ballRB.velocity.magnitude + (incrementFactor * hits * Time.deltaTime));

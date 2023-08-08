@@ -33,9 +33,5 @@ public class Timer : MonoBehaviour
             Debug.Log("triggered game over");
             GameManager.Instance.loadGameOver();
         }
-        else
-        {
-            StatManager.Instance.timer += Time.deltaTime;
-        }
     }
 }
