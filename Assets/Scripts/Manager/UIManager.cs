@@ -34,6 +34,8 @@ public class UIManager: MonoBehaviour
         //check scene
         if(SceneManager.GetActiveScene().name == "GameOverScene")
         {
+            //announceLoser
+            announceLoser();
             mainMenu.onClick.AddListener(GameManager.Instance.loadMainMenu);
             retry.onClick.AddListener(GameManager.Instance.loadGameScene);
         }

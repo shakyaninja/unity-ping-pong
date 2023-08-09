@@ -151,7 +151,7 @@ RectTransform:
   m_GameObject: {fileID: 40712210}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.88359374, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 656470447}
@@ -793,8 +793,8 @@ MonoBehaviour:
   scoreP3: {fileID: 0}
   scoreP4: {fileID: 0}
   timerText: {fileID: 0}
-  winnerText: {fileID: 2093366596}
-  loserText: {fileID: 0}
+  winnerText: {fileID: 0}
+  loserText: {fileID: 2093366596}
   mainMenu: {fileID: 1810124428}
   start: {fileID: 0}
   retry: {fileID: 40712212}
@@ -1179,10 +1179,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: lost
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: e73a58f6e2794ae7b1b7e50b7fb811b0, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7577c29df5006874f8231d036283c30c, type: 2}
+  m_sharedMaterial: {fileID: 9063141932576262502, guid: 7577c29df5006874f8231d036283c30c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

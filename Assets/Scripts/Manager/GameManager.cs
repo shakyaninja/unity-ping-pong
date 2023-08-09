@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     public float[] pControlDir = new float[4] { 1, 1, 1, 1 };
     public int isLastHitBy = 0;
     public bool canSpawnPowerUp = false;
-    public string[] powerUps = new string[4] { "reverse-control", "slow-time", "shield", "illusion" };
+    public string[] powerUps = new string[4] { "power-up-reverse-control", "power-up-slow-time", "power-up-shield", "power-up-illusion" };
 
     private void Awake()
     {
@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
         if(canSpawnPowerUp)
         {
             //spawn power ups randomly
-            spawnPowerUp(powerUps[0]);
+            spawnPowerUp(powerUps[Random.Range(0,3)]);
         }
     }
 
@@ -65,6 +65,7 @@ public class GameManager : MonoBehaviour
 
     public void spawnPowerUp(string name)
     {
+        Debug.Log("powerup name : " + name);
         Vector2 position = new Vector2(Random.Range(0,14), Random.Range(-4, 2));
         //find object from heirarchy
         GameObject powerUpObj = GameObject.FindGameObjectWithTag(name);
@@ -189,5 +190,6 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(time);
         //reset all powerups
         powerUpReset();
+        canSpawnPowerUp = true;
     }
 }
