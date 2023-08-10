@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
@@ -13,8 +14,8 @@ public class GameManager : MonoBehaviour
     public float[] pControlDir = new float[4] { 1, 1, 1, 1 };
     public int isLastHitBy = 0;
     public bool canSpawnPowerUp = false;
-    public string[] powerUps = new string[4] { "power-up-reverse-control", "power-up-slow-time", "power-up-shield", "power-up-illusion" };
-
+    public GameObject[] powerUps;
+    public GameObject[] shields;
     private void Awake()
     {
         Instance = this; 
@@ -31,6 +32,8 @@ public class GameManager : MonoBehaviour
     {   
         if(canSpawnPowerUp)
         {
+            Debug.Log(powerUps);
+            Debug.Log(powerUps[Random.Range(0, 3)]);
             //spawn power ups randomly
             spawnPowerUp(powerUps[Random.Range(0,3)]);
         }
@@ -63,15 +66,13 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(index);
     }
 
-    public void spawnPowerUp(string name)
+    public void spawnPowerUp(GameObject powerUp)
     {
+        canSpawnPowerUp = false;
         Debug.Log("powerup name : " + name);
         Vector2 position = new Vector2(Random.Range(0,14), Random.Range(-4, 2));
-        //find object from heirarchy
-        GameObject powerUpObj = GameObject.FindGameObjectWithTag(name);
-        powerUpObj.transform.position = position;
-        powerUpObj.SetActive(true);
-        //enable it
+        powerUp.transform.position = position;
+        powerUp.SetActive(true);
     }
 
     public void setIsLastHitBy(string player)
@@ -130,20 +131,20 @@ public class GameManager : MonoBehaviour
     {
         switch (name)
         {
-            case "power-up-reverse-control":
+            case "powerUpReverseControl":
                 reverseControl(isLastHitBy);
                 break;
 
-            case "power-up-slow-time":
+            case "powerUpSlowTime":
                 slowTime(isLastHitBy);
                 break;
 
-            case "power-up-shield":
-                slowTime(isLastHitBy);
+            case "powerUpShield":
+                shield(isLastHitBy);
                 break;
 
-            case "power-up-illusion":
-                slowTime(isLastHitBy);
+            case "powerUpIllusion":
+                illusion();
                 break;
 
             default:
@@ -157,7 +158,7 @@ public class GameManager : MonoBehaviour
         Debug.Log(string.Format("reverse control of {0}", player));
         //do it for player 
         pControlDir[player] = -1;
-        StartCoroutine(cooldownPowerUp(player, 6));
+        StartCoroutine(cooldownPowerUp( 6));
     }
 
     public void slowTime(int player)
@@ -170,22 +171,36 @@ public class GameManager : MonoBehaviour
     public void shield(int player)
     {
         Debug.Log(string.Format("shield of {0}", player));
-        
-        
+        shields[player].SetActive(true);
+        StartCoroutine(cooldownPowerUp(6));
     }
 
     public void illusion()
     {
         Debug.Log(string.Format("illusion "));
+        StartCoroutine(cooldownPowerUp( 6));
+    }
 
+    public void ghost()
+    {
+        Debug.Log(string.Format("ghost "));
+        StartCoroutine(cooldownPowerUp( 6));
     }
 
     public void powerUpReset()
     {
+        //reset coontrols
         pControlDir = new float[] { 1, 1, 1, 1 };
+        //reset shields
+        foreach (var shield in shields)
+        {
+            shield.SetActive(false);
+        }
+        //reset illusion
+        //reset ghost
     }
 
-    IEnumerator cooldownPowerUp(int player, int time )
+    IEnumerator cooldownPowerUp(int time )
     {
         yield return new WaitForSeconds(time);
         //reset all powerups

@@ -76,7 +76,6 @@ public class BallMovement : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("collision here");
         Vector2 directionHit = collision.GetContact(0).normal;
         Vector2 clampDirection = Vector2.ClampMagnitude(directionHit, 0.8f);
 
@@ -94,7 +93,7 @@ public class BallMovement : MonoBehaviour
         
         if (sameDirectionHit > 3)
         {
-            Debug.Log("trigger random direction");
+            //Debug.Log("trigger random direction");
             //give random direction
             ballRB.velocity = new Vector2(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)) * ballRB.velocity.magnitude;
             sameDirectionHit = 0;

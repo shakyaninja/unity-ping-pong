@@ -12,10 +12,11 @@ TagManager:
   - topBorder
   - bottomBorder
   - trail
-  - power-up-reverse-control
-  - power-up-shield
-  - power-up-slow-time
-  - power-up-illusion
+  - powerUpReverseControl
+  - powerUpShield
+  - powerUpIllusion
+  - powerUpGhost
+  - powerUpSlowTime
   layers:
   - Default
   - TransparentFX
