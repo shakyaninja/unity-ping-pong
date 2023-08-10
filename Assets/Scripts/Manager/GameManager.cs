@@ -32,8 +32,8 @@ public class GameManager : MonoBehaviour
     {   
         if(canSpawnPowerUp)
         {
-            Debug.Log(powerUps);
-            Debug.Log(powerUps[Random.Range(0, 3)]);
+            //Debug.Log(powerUps);
+            //Debug.Log(powerUps[Random.Range(0, 3)]);
             //spawn power ups randomly
             spawnPowerUp(powerUps[Random.Range(0,3)]);
         }

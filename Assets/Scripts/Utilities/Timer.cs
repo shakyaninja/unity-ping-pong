@@ -30,13 +30,13 @@ public class Timer : MonoBehaviour
     {
         if(StatManager.Instance.timer == 60)
         {
-            Debug.Log("triggered game over");
+            //Debug.Log("triggered game over");
             GameManager.Instance.loadGameOver();
         }
 
         if(StatManager.Instance.timer == 10)
         {
-            Debug.Log("ready for power up");
+            //Debug.Log("ready for power up");
             GameManager.Instance.canSpawnPowerUp = true;
         }
     }

@@ -27,7 +27,6 @@ public class BallMovement : MonoBehaviour
         ballRB = GetComponent<Rigidbody2D>(); // select RB from current component
         trailRenderer = GetComponent<TrailRenderer>();
         StartCoroutine(Timer(2));
-        Move(new Vector2(-10, 0));
     }
 
     // Update is called once per frame
@@ -67,7 +66,7 @@ public class BallMovement : MonoBehaviour
 
     private IEnumerator SpawnParticle()
     {
-        Debug.Log("spawn particle called");
+        //Debug.Log("spawn particle called");
         prtclSystem.Play();
         yield return new WaitForSeconds(0.7f);
         prtclSystem.Stop();
@@ -76,8 +75,9 @@ public class BallMovement : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Vector2 directionHit = collision.GetContact(0).normal;
-        Vector2 clampDirection = Vector2.ClampMagnitude(directionHit, 0.8f);
+        //Debug.Log(collision);
+        //Vector2 directionHit = collision.GetContact(0).normal;
+        //Vector2 clampDirection = Vector2.ClampMagnitude(directionHit, 0.8f);
 
         bool IsVectorInRange(Vector2 vector, Vector2 min, Vector2 max)
         {
@@ -85,19 +85,6 @@ public class BallMovement : MonoBehaviour
                    vector.y >= min.y && vector.y <= max.y;
         }
 
-        if (IsVectorInRange(directionHit, previousDirection - new Vector2(0.2f,0.2f), previousDirection + new Vector2(0.2f, 0.2f)))
-        {
-           // Debug.Log("same direction hit ");
-            sameDirectionHit++;
-        }
-        
-        if (sameDirectionHit > 3)
-        {
-            //Debug.Log("trigger random direction");
-            //give random direction
-            ballRB.velocity = new Vector2(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)) * ballRB.velocity.magnitude;
-            sameDirectionHit = 0;
-        }
 
         if (collision.gameObject.CompareTag("racket") && ((incrementFactor * hits * Time.deltaTime) + ballRB.velocity.magnitude) < maxSpeed)
         {
@@ -106,21 +93,36 @@ public class BallMovement : MonoBehaviour
 
             hits ++;
 
-            //using contact normal
-            Vector2 contactNormal = collision.GetContact(0).normal;
 
             // Calculate the new direction based on the collision point
             Vector2 collisionPoint = collision.GetContact(0).point;
             Vector2 racketCenter = collision.gameObject.transform.position;
             Vector2 direction = collisionPoint - racketCenter;
             direction.Normalize();
+            //using contact normal
+            Vector2 contactNormal = collision.GetContact(0).normal;
+
+            if (IsVectorInRange(collisionPoint, previousDirection - new Vector2(0.2f,0.2f), previousDirection + new Vector2(0.2f, 0.2f)))
+            {
+               // Debug.Log("same direction hit ");
+                sameDirectionHit++;
+            }
+        
+            if (sameDirectionHit > 3)
+            {
+                //Debug.Log("trigger random direction");
+                //give random direction
+                ballRB.velocity = new Vector2(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)) * ballRB.velocity.magnitude;
+                sameDirectionHit = 0;
+            }
 
             //handle particle spawn
             prtclSystem.transform.position = collisionPoint;
             StartCoroutine("SpawnParticle");
+            //Debug.Log(clampDirection);
 
             // Update the ball's velocity with the new direction and increased speed
-            ballRB.velocity = (ballRB.velocity.magnitude + (incrementFactor * hits * Time.deltaTime)) * clampDirection;
+            ballRB.velocity = (ballRB.velocity.magnitude + (incrementFactor * hits * Time.deltaTime)) * direction;
         }
         else if (collision.gameObject.CompareTag("rightBorder"))
         {
