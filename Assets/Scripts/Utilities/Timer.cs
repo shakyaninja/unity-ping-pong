@@ -22,6 +22,7 @@ public class Timer : MonoBehaviour
         if(GameManager.Instance.getActiveScene().name == "GameScene")
         {
             StartCoroutine("CheckTimer");
+            StartCoroutine("SpawnPowerUp");
         }
     }
 
@@ -33,11 +34,11 @@ public class Timer : MonoBehaviour
             //Debug.Log("triggered game over");
             GameManager.Instance.loadGameOver();
         }
+    }
 
-        if(StatManager.Instance.timer == 10)
-        {
-            //Debug.Log("ready for power up");
-            GameManager.Instance.canSpawnPowerUp = true;
-        }
+    IEnumerator SpawnPowerUp()
+    {
+        yield return new WaitForSeconds(10);
+        GameManager.Instance.canSpawnPowerUp = true;
     }
 }

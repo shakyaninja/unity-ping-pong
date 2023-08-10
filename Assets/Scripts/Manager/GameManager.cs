@@ -16,6 +16,8 @@ public class GameManager : MonoBehaviour
     public bool canSpawnPowerUp = false;
     public GameObject[] powerUps;
     public GameObject[] shields;
+    public GameObject ball;
+    public ParticleSystem prtclSystem;
     private void Awake()
     {
         Instance = this; 
@@ -29,13 +31,20 @@ public class GameManager : MonoBehaviour
 
     // Update is called once per frame
     void FixedUpdate()
-    {   
-        if(canSpawnPowerUp)
+    {
+        if (canSpawnPowerUp)
         {
             //Debug.Log(powerUps);
             //Debug.Log(powerUps[Random.Range(0, 3)]);
             //spawn power ups randomly
-            spawnPowerUp(powerUps[Random.Range(0,3)]);
+            spawnPowerUp(powerUps[Random.Range(0, 3)]);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            /*Time.timeScale = (Time.timeScale == 1.0f) ? 0f:1.0f;
+            //trigger pause*/
+            Application.Quit();
         }
     }
 
@@ -70,7 +79,7 @@ public class GameManager : MonoBehaviour
     {
         canSpawnPowerUp = false;
         Debug.Log("powerup name : " + name);
-        Vector2 position = new Vector2(Random.Range(0,14), Random.Range(-4, 2));
+        Vector2 position = new Vector2(Random.Range(0,10), Random.Range(-3, 2));
         powerUp.transform.position = position;
         powerUp.SetActive(true);
     }
@@ -79,19 +88,19 @@ public class GameManager : MonoBehaviour
     {
         switch (player)
         {
-            case "player1":
+            case "Player1":
                 isLastHitBy = 1;
                 break;
 
-            case "player2":
+            case "Player2":
                 isLastHitBy = 2;
                 break;
 
-            case "player3":
+            case "Player3":
                 isLastHitBy = 3;
                 break;
 
-            case "player4":
+            case "Player4":
                 isLastHitBy = 4;
                 break;
 
@@ -147,6 +156,10 @@ public class GameManager : MonoBehaviour
                 illusion();
                 break;
 
+            case "powerUpGhost":
+                ghost();
+                break;
+
             default:
                 break;
 
@@ -166,6 +179,7 @@ public class GameManager : MonoBehaviour
         Debug.Log(string.Format("slow time of {0}", player));
         //do it for player 
         pControlDir[player] = 0.2f;
+        StartCoroutine(cooldownPowerUp(6));
     }
 
     public void shield(int player)
@@ -178,13 +192,23 @@ public class GameManager : MonoBehaviour
     public void illusion()
     {
         Debug.Log(string.Format("illusion "));
-        StartCoroutine(cooldownPowerUp( 6));
+        //illusion of multiple balls
+        StartCoroutine("SpawnParticle");
+    }
+
+    private IEnumerator SpawnParticle()
+    {
+        //Debug.Log("spawn particle called");
+        prtclSystem.Play();
+        yield return new WaitForSeconds(3f);
+        prtclSystem.Stop();
     }
 
     public void ghost()
     {
         Debug.Log(string.Format("ghost "));
-        StartCoroutine(cooldownPowerUp( 6));
+        ball.gameObject.SetActive(false);
+        StartCoroutine(cooldownPowerUp( 1));
     }
 
     public void powerUpReset()
@@ -196,8 +220,8 @@ public class GameManager : MonoBehaviour
         {
             shield.SetActive(false);
         }
-        //reset illusion
         //reset ghost
+        ball.gameObject.SetActive(true);
     }
 
     IEnumerator cooldownPowerUp(int time )

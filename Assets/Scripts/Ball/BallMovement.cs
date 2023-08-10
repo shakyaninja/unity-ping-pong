@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -15,12 +14,14 @@ public class BallMovement : MonoBehaviour
     public ParticleSystem prtclSystem;
     private Vector2 previousDirection = Vector2.zero;
     private int sameDirectionHit = 0;
+    private float maxDeflectionAngle = 60.0f;
 
 
     Rigidbody2D ballRB;
     Rigidbody2D racketRB;
     TrailRenderer trailRenderer;
-    
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -75,10 +76,6 @@ public class BallMovement : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        //Debug.Log(collision);
-        //Vector2 directionHit = collision.GetContact(0).normal;
-        //Vector2 clampDirection = Vector2.ClampMagnitude(directionHit, 0.8f);
-
         bool IsVectorInRange(Vector2 vector, Vector2 min, Vector2 max)
         {
             return vector.x >= min.x && vector.x <= max.x &&
@@ -86,43 +83,51 @@ public class BallMovement : MonoBehaviour
         }
 
 
-        if (collision.gameObject.CompareTag("racket") && ((incrementFactor * hits * Time.deltaTime) + ballRB.velocity.magnitude) < maxSpeed)
+        if (collision.gameObject.CompareTag("racket"))
         {
+            GameManager.Instance.setIsLastHitBy(collision.gameObject.name);
+
             //play hit sound
             AudioManager.Instance.Play("BallHitWall");
 
-            hits ++;
-
-
-            // Calculate the new direction based on the collision point
-            Vector2 collisionPoint = collision.GetContact(0).point;
-            Vector2 racketCenter = collision.gameObject.transform.position;
-            Vector2 direction = collisionPoint - racketCenter;
-            direction.Normalize();
-            //using contact normal
-            Vector2 contactNormal = collision.GetContact(0).normal;
-
-            if (IsVectorInRange(collisionPoint, previousDirection - new Vector2(0.2f,0.2f), previousDirection + new Vector2(0.2f, 0.2f)))
+            if (((incrementFactor * hits * Time.deltaTime) + ballRB.velocity.magnitude) < maxSpeed)
             {
-               // Debug.Log("same direction hit ");
-                sameDirectionHit++;
-            }
-        
-            if (sameDirectionHit > 3)
-            {
-                //Debug.Log("trigger random direction");
-                //give random direction
-                ballRB.velocity = new Vector2(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)) * ballRB.velocity.magnitude;
-                sameDirectionHit = 0;
-            }
 
-            //handle particle spawn
-            prtclSystem.transform.position = collisionPoint;
-            StartCoroutine("SpawnParticle");
-            //Debug.Log(clampDirection);
+                hits ++;
+                
+                // Calculate the new direction based on the collision point
+                Vector2 collisionPoint = collision.GetContact(0).point;
+                Vector2 racketCenter = collision.gameObject.transform.position;
+                Vector2 direction = (collisionPoint - racketCenter).normalized;
 
-            // Update the ball's velocity with the new direction and increased speed
-            ballRB.velocity = (ballRB.velocity.magnitude + (incrementFactor * hits * Time.deltaTime)) * direction;
+                //using contact normal
+                Vector2 contactNormal = collision.GetContact(0).normal;
+
+                if (IsVectorInRange(collisionPoint, previousDirection - new Vector2(0.2f, 0.2f), previousDirection + new Vector2(0.2f, 0.2f)))
+                {
+                    // Debug.Log("same direction hit ");
+                    sameDirectionHit++;
+                }
+
+                //handle particle spawn
+                prtclSystem.transform.position = collisionPoint;
+                StartCoroutine("SpawnParticle");
+
+                if (sameDirectionHit > 3)
+                {
+                    Debug.Log("trigger random direction");
+                    //give random direction
+                    ballRB.velocity = new Vector2(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)) * ballRB.velocity.magnitude;
+                    sameDirectionHit = 0;
+                }
+                else
+                {
+                    // Update the ball's velocity with the new direction and increased speed
+                    ballRB.velocity += (incrementFactor * hits * Time.deltaTime* direction);
+                }
+
+
+            }
         }
         else if (collision.gameObject.CompareTag("rightBorder"))
         {
@@ -156,7 +161,6 @@ public class BallMovement : MonoBehaviour
             scoreP1();
             StartCoroutine(RespawnBall(2));
         }
-        
 
         previousDirection = ballRB.velocity.normalized;
     }

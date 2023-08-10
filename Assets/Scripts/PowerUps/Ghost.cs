@@ -23,7 +23,7 @@ public class Ghost : PowerUp
             //activate power up by checking which player has last hit the ball
             GameManager.Instance.activatePowerUp(gameObject.tag);
             //disable the powerup
-            //gameObject.SetActive(false);
+            gameObject.SetActive(false);
 
         }
     }

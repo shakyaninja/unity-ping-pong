@@ -10,6 +10,7 @@ public class SlowTime : PowerUp
         {
             //activate power up by checking which player has last hit the ball
             GameManager.Instance.activatePowerUp(gameObject.tag);
+            gameObject.SetActive(false);
         }
     }
 }
