@@ -15,7 +15,7 @@ public class UIManager: MonoBehaviour
     [SerializeField] private TextMeshProUGUI timerText;
     [SerializeField] private TextMeshProUGUI winnerText;
     [SerializeField] private TextMeshProUGUI loserText;
-    [SerializeField] private Button mainMenu, start, retry, highscore;
+    [SerializeField] private Button mainMenu, start, retry, highscore, instructions, back;
     [SerializeField] private PowerUp[] powerups;
     public static UIManager Instance;
 
@@ -30,6 +30,7 @@ public class UIManager: MonoBehaviour
         {
             start.onClick.AddListener(GameManager.Instance.loadGameScene);
             highscore.onClick.AddListener(GameManager.Instance.loadGameScene);
+            instructions.onClick.AddListener(GameManager.Instance.loadInstructions);
         }
         //check scene
         if(SceneManager.GetActiveScene().name == "GameOverScene")
@@ -38,6 +39,11 @@ public class UIManager: MonoBehaviour
             announceLoser();
             mainMenu.onClick.AddListener(GameManager.Instance.loadMainMenu);
             retry.onClick.AddListener(GameManager.Instance.loadGameScene);
+        }
+
+        if (SceneManager.GetActiveScene().name == "InstructionScene")
+        {
+            back.onClick.AddListener(GameManager.Instance.loadMainMenu);
         }
     }
 

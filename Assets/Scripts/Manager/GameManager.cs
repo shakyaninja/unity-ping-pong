@@ -69,6 +69,11 @@ public class GameManager : MonoBehaviour
         loadScene(2);
     }
 
+    public void loadInstructions()
+    {
+        loadScene(3);
+    }
+
     public void loadScene(int index)
     {
         Debug.Log(index);
